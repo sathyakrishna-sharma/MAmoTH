@@ -1,13 +1,8 @@
 import transformers
 from transformers import pipeline
-#from transformers import datasets
-# import datasets
-# from datasets import load_dataset
-
-#dataset = load_dataset("TIGER-Lab/MathInstruct")
 
 from transformers import pipeline
-pipeline = pipeline("text-generation", "TIGER-Lab/MAmmoTH-Coder-7B", device = 0, max_length = 200, temperature = 0)
+math_pipeline = pipeline("text-generation", "TIGER-Lab/MAmmoTH-Coder-7B", device = 0, max_length = 200, temperature = 0)
 
 gsm8k = [{"question": "Janet\u2019s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fresh duck egg. How much in dollars does she make every day at the farmers' market?", "answer": "Janet sells 16 - 3 - 4 = <<16-3-4=9>>9 duck eggs a day.\nShe makes 9 * 2 = $<<9*2=18>>18 every day at the farmer\u2019s market.\n#### 18"}
 ,{"question": "A robe takes 2 bolts of blue fiber and half that much white fiber.  How many bolts in total does it take?", "answer": "It takes 2/2=<<2/2=1>>1 bolt of white fiber\nSo the total amount of fabric is 2+1=<<2+1=3>>3 bolts of fabric\n#### 3"}
@@ -70,7 +65,7 @@ mamoth_answer = []
 
 for query in questions:
   input = alpaca_template.format(query = query + rationale_prefix)
-  output = pipeline(input)[0]['generated_text']
+  output = math_pipeline(input)[0]['generated_text']
   mamoth_answer.append(output)
 
 
